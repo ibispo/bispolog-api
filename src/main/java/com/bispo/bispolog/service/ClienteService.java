@@ -18,7 +18,6 @@ public class ClienteService {
 	@Autowired
 	ClienteRespository clienteRespository;
 	
-	// Feito
 	public int buscarIdadePorNome(String nm) {
 		
 		Optional<Cliente> clienteOptional = clienteRespository.findByName(nm); 
