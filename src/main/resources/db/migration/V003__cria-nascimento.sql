@@ -1,0 +1,1 @@
+alter table cliente add nascimento DATE null;
