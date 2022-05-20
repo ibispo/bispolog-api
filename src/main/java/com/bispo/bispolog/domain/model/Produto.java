@@ -11,9 +11,11 @@ import javax.persistence.Table;
 
 import org.springframework.hateoas.RepresentationModel;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 @Entity
 @Table(name="TB_PRODUTO")
 public class Produto extends RepresentationModel<Produto> implements Serializable {
@@ -21,7 +23,6 @@ public class Produto extends RepresentationModel<Produto> implements Serializabl
 	private static final long serialVersionUID = 1L;
 	
 	@Id
-	
 	@GeneratedValue(strategy=GenerationType.IDENTITY) // GenerationType.AUTO --- Error below
 
 	/*

@@ -12,7 +12,7 @@ import java.util.Optional;
 public interface ClienteRepository extends JpaRepository<Cliente, Long> {
 
 	Optional<List<Cliente>> findByNomeContaining(String nm);
-	
 	Optional<Cliente> findByNome(String nm);
+	Optional<Cliente> findByEmail(String email);
 	
 }

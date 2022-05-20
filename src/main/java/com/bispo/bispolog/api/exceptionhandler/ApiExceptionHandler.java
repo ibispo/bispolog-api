@@ -1,6 +1,6 @@
 package com.bispo.bispolog.api.exceptionhandler;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,8 +12,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+
+import com.bispo.bispolog.domain.exception.EntidadeNaoEncontradaException;
+import com.bispo.bispolog.domain.exception.NegocioException;
 
 import lombok.AllArgsConstructor;
 
@@ -41,7 +45,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 		
 		Problema problema = new Problema();
 		problema.setStatus(status.value());
-		problema.setDataHora(LocalDateTime.now());
+		problema.setDataHora(OffsetDateTime.now());
 		problema.setTitulo(mensagemSource.getMessage("campos.obrigatorios", null, 
 			LocaleContextHolder.getLocale()));
 		problema.setCampos(campos);
@@ -49,5 +53,36 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 		return handleExceptionInternal(ex, problema, headers, status, request);
 		
 	}
+	
+	@ExceptionHandler(NegocioException.class)
+	public ResponseEntity<Object> handleNegocioException(NegocioException ex, WebRequest webReq) {
+
+		HttpStatus stat = HttpStatus.BAD_REQUEST;
+		
+		Problema problema = new Problema();
+		problema.setStatus(stat.value());
+		problema.setDataHora(OffsetDateTime.now());
+		problema.setTitulo(ex.getMessage());
+		
+		
+		
+		return handleExceptionInternal(ex, problema, new HttpHeaders(), stat, webReq);
+	}
+	
+	@ExceptionHandler(EntidadeNaoEncontradaException.class)
+	public ResponseEntity<Object> handleEntidadeNaoEncontradaException(NegocioException ex, WebRequest webReq) {
+
+		HttpStatus stat = HttpStatus.NOT_FOUND;
+		
+		Problema problema = new Problema();
+		problema.setStatus(stat.value());
+		problema.setDataHora(OffsetDateTime.now());
+		problema.setTitulo(ex.getMessage());
+		
+		
+		
+		return handleExceptionInternal(ex, problema, new HttpHeaders(), stat, webReq);
+	}
+	
 	
 }

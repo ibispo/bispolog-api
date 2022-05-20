@@ -1,4 +1,4 @@
-package com.bispo.bispolog.service;
+package com.bispo.bispolog.domain.service;
 
 import java.time.LocalDate;
 import java.time.Period;

@@ -1,6 +1,5 @@
 package com.bispo.bispolog.service;
 
-import java.time.LocalDate;
 import java.util.Optional;
 
 import org.junit.Before;
@@ -16,6 +15,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import com.bispo.bispolog.domain.model.Cliente;
 import com.bispo.bispolog.domain.repository.ClienteRepository;
+import com.bispo.bispolog.domain.service.ClienteService;
 
 @RunWith(SpringRunner.class)
 public class BuscaClienteTest {

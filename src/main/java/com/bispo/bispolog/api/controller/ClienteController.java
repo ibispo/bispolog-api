@@ -1,11 +1,9 @@
 package com.bispo.bispolog.api.controller;
 
 import java.util.List;
-import java.util.Optional;
 
 import javax.validation.Valid;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -20,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.bispo.bispolog.domain.model.Cliente;
 import com.bispo.bispolog.domain.repository.ClienteRepository;
+import com.bispo.bispolog.domain.service.CatalogoClienteService;
 
 import lombok.AllArgsConstructor;
 
@@ -42,8 +41,9 @@ public class ClienteController {
 //	@PersistenceContext
 //	private EntityManager manager;
 	
-	// @Autowired  ----- tirou por causa do lombok
+	// @Autowired  ----- tirou por causa do lombok @AllArgsConstructor
 	private ClienteRepository clienteRepository;
+	private CatalogoClienteService cliService;
 	
 	@GetMapping
 	public List<Cliente> listar() {
@@ -55,69 +55,43 @@ public class ClienteController {
 
 	@GetMapping("/{clienteId}")
 	public ResponseEntity<Cliente> obter(@PathVariable(name = "clienteId") Long id) {
-		
 //		Optional<Cliente> cli = clienteRespository.findById(id);
 //		return cli.isPresent() ? 
 //				ResponseEntity.ok(cli.get()) : 
 //					ResponseEntity.notFound().build();  // cli.orElse(null);
-		
 		return clienteRepository.findById(id)
 				// .map(cli -> ResponseEntity.ok(cli))   // Lambda
 				.map(ResponseEntity::ok)                // Reference Method
 				.orElse(ResponseEntity.notFound().build());
-		
 	}
-	
 	
 	@PostMapping
 	@ResponseStatus(code = HttpStatus.CREATED)
 	public Cliente adicionar(@Valid @RequestBody Cliente cli) {
-		return clienteRepository.save(cli);
+		return cliService.salvar(cli);
+		// return cliService.salvar(cli);
 	}
 	
 	@PutMapping("/{id}")
 	public ResponseEntity<Cliente> atualizar(@Valid @PathVariable Long id, @RequestBody Cliente cli) {
-		
 		// Optional<Cliente> cli = clienteRepository.findById(id);
-		
 		if ( !clienteRepository.existsById(id)  ) {
 			return ResponseEntity.notFound().build();
 		} 
-
 		cli.setId(id);
-		clienteRepository.save(cli);
-		
+		//clienteRepository.save(cli);
+		cliService.salvar(cli);
 		return ResponseEntity.ok(cli);
-		
-		
 	}
-	
 	
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Void> excluir(@PathVariable Long id) {
-		
 		if ( !clienteRepository.existsById(id)  ) {
 			return ResponseEntity.notFound().build();
 		} 
-		
-		clienteRepository.deleteById(id);
+		// clienteRepository.deleteById(id);
+		cliService.excluir(id);
 		return ResponseEntity.noContent().build();
-		
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	
 }
