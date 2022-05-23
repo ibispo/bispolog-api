@@ -17,6 +17,8 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import com.bispo.bispolog.domain.exception.NegocioException;
+
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -90,7 +92,24 @@ public class Entrega {
 		return ocorr;
 		
 	}
+
+	public void finalizar() {
+
+		if ( naoPodeSerFinalizada() ) {
+			throw new NegocioException("Entrega não pode ser finalizada.");
+		}
+		
+		this.statusEntrega = StatusEntrega.FINALIZADA;
+		this.dataFinalizacao = OffsetDateTime.now();
+		
+	}
 	
+	public boolean podeSerFinalizada() {
+		return StatusEntrega.PENDENTE.equals(this.statusEntrega);
+	}
 	
+	public boolean naoPodeSerFinalizada() {
+		return !podeSerFinalizada();
+	}
 	
 }
